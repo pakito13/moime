@@ -1,0 +1,2017 @@
+<html><head><base href="https://coco-app.example.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interface COCO</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #c6b197;
+    padding-top: 40px; /* Add padding to body to account for tabs */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.top-margin {
+    display: none; /* Hide the top margin */
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    padding: 10px;
+    margin: 0 auto; /* Change this line */
+    max-width: 1000px; /* Reduced from 1200px */
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+header {
+    background-color: #c6b197;
+    padding: 5px; /* Reduced padding */
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.left-column {
+    width: 25%;
+    background-color: #e2c9f7;
+    padding: 10px;
+    margin-right: 20px;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+
+.left-column h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.left-column ul {
+    list-style: none;
+}
+
+.left-column ul li {
+    display: block;
+    background-color: #e0d4fa;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.center-column {
+    width: 100%;
+    max-width: 75%;
+    background-color: transparent;
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    transition: max-width 0.3s ease;
+}
+
+.center-column.full-width {
+    max-width: 100%;
+}
+
+.right-column {
+    width: 25%;
+    background-color: #f5f5f5;
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.right-column table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.right-column th, .right-column td {
+    padding: 8px;
+    border: 1px solid #bbb;
+    text-align: left;
+}
+
+.right-column thead {
+    background-color: #c8c8ff;
+}
+
+.right-column tbody tr:nth-child(even) {
+    background-color: #cceeff;
+}
+
+.right-column tbody tr:nth-child(odd) {
+    background-color: #ffcccc;
+}
+
+.right-column h3 {
+    margin-top: 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.tab-container {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #c6b197; /* Change this line to match the body background color */
+    border-bottom: 1px solid #ccc;
+    padding: 5px 5px 0;
+    position: absolute;
+    top: -40px; /* Adjust to position tabs above the container */
+    left: 0;
+    right: 0;
+    min-height: 40px;
+}
+
+.tab {
+    position: relative;
+    padding-right: 25px;
+    padding: 8px 15px;
+    margin-right: 5px;
+    background-color: #fff; /* Change this line to make all tabs white */
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+}
+
+.tab[data-name="Accueil"] {
+    background-color: #e0e0e0; /* Light gray color */
+}
+
+.tab.active[data-name="Accueil"] {
+    background-color: #e0e0e0; /* Keep the active state gray as well */
+    border-bottom: 1px solid #e0e0e0; /* Match the border color to the background */
+}
+
+.tab .close-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-color: #ff0000;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.tab-content {
+    display: none;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    flex-grow: 1;
+}
+
+.tab-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.right-column .menu-buttons {
+    display: none;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.right-column .menu-buttons button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #a89c88;
+    color: white;
+}
+
+.right-column .menu-buttons button:hover {
+    background-color: #8e8370;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c6b197;
+    padding: 8px;
+    height: 50px; /* Reduced height */
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-bar {
+    width: 80%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.validate-button {
+    padding: 8px 12px;
+    background-color: #a89c88;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.chat-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    height: 300px;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.chat-message .pseudo {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.chat-message img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.private-chat-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.profile-actions {
+    display: flex;
+    align-items: center;
+}
+
+.profile-picture {
+    width: 3cm;
+    height: 4cm;
+    border-radius: 10px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-right: 10px;
+}
+
+.profile-picture:hover {
+    transform: scale(1.1);
+}
+
+.chat-actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-action-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #5e4434;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.chat-action-btn:hover {
+    color: #c6b197;
+}
+
+.chat-action-btn.add-friend {
+    color: #4CAF50;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 60%;
+    max-height: 80%;
+    object-fit: contain;
+    background-color: transparent;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.accueil-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#connectedUsers {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.accueil-list {
+    width: 12cm;
+    margin: 0 auto;
+    font-size: 14px;
+    list-style-type: none;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.accueil-list li {
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+}
+
+.accueil-list li:nth-child(even) {
+    background-color: #cceeff;
+}
+
+.accueil-list li:nth-child(odd) {
+    background-color: #ffcccc;
+}
+
+.accueil-list .user-age {
+    display: inline-block;
+    width: 30px;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.accueil-list .user-department {
+    font-size: 0.9em;
+    color: #666;
+    margin-left: 5px;
+}
+
+.accueil-list a {
+    text-decoration: none;
+    color: #333;
+    flex-grow: 1;
+}
+
+.accueil-list a:hover {
+    text-decoration: underline;
+}
+
+#connectedUsers table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#connectedUsers th, #connectedUsers td {
+    padding: 8px;
+    border: 1px solid #bbb;
+    text-align: left;
+}
+
+#connectedUsers thead {
+    background-color: #c8c8ff;
+}
+
+#connectedUsers tbody tr:nth-child(even) {
+    background-color: #cceeff;
+}
+
+#connectedUsers tbody tr:nth-child(odd) {
+    background-color: #ffcccc;
+}
+
+#friendsList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#friendsList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#friendsList button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.amizz-content > button {
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.friend-request {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.friend-request button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.friends-list-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    max-height: 400px;
+    background-color: #f9f9f9;
+    border: 1px solid #888;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.friends-list-content {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 360px;
+}
+
+.close-friends-list {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-friends-list:hover,
+.close-friends-list:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#showFriendsListBtn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+#showFriendsListBtn:hover {
+    background-color: #45a049;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    max-width: 300px;
+}
+
+.username-input {
+    width: 100%;
+    max-width: 180px;
+    border: 2px solid #000; /* Add this line */
+    border-radius: 4px; /* New line */
+    padding: 8px; /* New line */
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.registration-frame {
+    border: 2px solid #000; /* Change this line */
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    max-width: 280px; /* Reduce the width slightly */
+    width: 100%;
+}
+
+#initialRegistration {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px); /* Adjusted to account for the new margin height */
+    padding: 20px;
+}
+
+.registration-form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.age-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 10px;
+    padding-left: 20px; /* Add left padding to shift the age label and input to the right */
+}
+
+.age-container label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: black;
+}
+
+.age-input {
+    width: 40px; /* Reduce width to fit only two digits */
+    text-align: center;
+    -moz-appearance: textfield; /* Firefox */
+}
+
+.age-input::-webkit-outer-spin-button,
+.age-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.department-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 10px;
+    padding-left: 20px;
+}
+
+.department-container label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: black;
+}
+
+.department-input {
+    width: 80px;
+    text-align: center;
+}
+
+.registration-form button {
+    padding: 8px;
+    background-color: yellow; /* Adjust background color */
+    color: black;
+    border: 2px solid #000; /* Add a 2px solid black border */
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Add transition for border-color */
+    font-size: 12px;
+    width: 80px; /* Match the width of the department input field */
+    height: 36px; /* Adjust height for better proportion */
+}
+
+.registration-form button:hover {
+    background-color: #e6e600;
+    border-color: #666; /* Darken the border on hover */
+}
+
+.draggable-video-container {
+    position: fixed;
+    width: 320px;
+    height: 240px;
+    background-color: black;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    resize: both;
+}
+
+.draggable-video-container .video-header {
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+}
+
+.draggable-video-container video {
+    width: 100%;
+    height: calc(100% - 30px);
+    display: block;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #5e4434;
+    margin-right: 5px;
+}
+
+.icon-btn:hover {
+    color: #c6b197;
+}
+
+.user-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.user-actions .icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #5e4434;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.user-actions .icon-btn:hover {
+    color: #c6b197;
+}
+
+.right-column table td .fa-video {
+    margin-left: 5px;
+    color: green;
+}
+
+.right-column .user-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.right-column .user-actions .icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #5e4434;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.right-column .user-actions .icon-btn:hover {
+    color: #c6b197;
+}
+
+.salon-icons {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+}
+
+.salon-icons .icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #5e4434;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.salon-icons .icon-btn:hover {
+    color: #c6b197;
+}
+
+.speaker-system {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.current-speakers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.current-speaker {
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 5px;
+    flex: 1;
+    min-width: 150px;
+    max-width: calc(20% - 10px);
+}
+
+.speaker-queue {
+    background-color: #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#microphoneControls button {
+    padding: 8px 12px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#micOnBtn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+#micOffBtn {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+#micMuteBtn {
+    background-color: #f0f0f0; /* Light gray */
+}
+
+#microphoneControls button:hover:not(:disabled) {
+    opacity: 0.8;
+}
+
+#microphoneControls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.gender-selection {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 0 10px; /* Add padding to create space on both sides */
+}
+
+.gender-selection label {
+    font-size: 14px; /* Reduce the font size */
+    font-weight: bold;
+    color: black;
+}
+
+.gender-selection label:first-child {
+    margin-right: 20px; /* Increase the space between "homme" and "femme" */
+    margin-left: -5px; /* Move "homme" slightly to the left */
+}
+
+.colored-margin {
+    height: 60px; /* Reduced height */
+    display: none;
+}
+
+#initialRegistration .colored-margin {
+    display: block;
+    height: 60px; /* Reduced height */
+    background-color: #8B4513;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.registration-frame h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+}
+</style>
+</head>
+<body>
+
+<div class="top-margin"></div>
+
+<header>
+</header>
+
+<div class="container">
+    <div class="tab-container" id="tabContainer"></div>
+
+    <section class="left-column">
+        <h2>Salons publics</h2>
+        <ul id="salonList">
+            <li onclick="openSalon('Salon 1')">Salon 1</li>
+            <li onclick="openSalon('Salon 2')">Salon 2</li>
+            <li onclick="openSalon('Salon 3')">Salon 3</li>
+            <li onclick="openSalon('Salon 18 - 25')">Salon 18 - 25</li>
+            <li onclick="openSalon('Salon 20 - 40 VOX')">Salon 20 - 40 VOX</li>
+            <li onclick="openSalon('Salon Politique')">Salon Politique</li>
+        </ul>
+    </section>
+
+    <section class="center-column">
+        <div id="tabContents"></div>
+    </section>
+
+    <section class="right-column">
+        <div class="menu-buttons">
+            <button onclick="openAccueil()">Accueil</button>
+            <button onclick="openProfile()">Profil</button>
+            <button onclick="openAmizz()">Amizz</button>
+            <button onclick="openAuthentication()">Authentification</button>
+            <button onclick="openProfileRecovery()">Récupération de profil</button>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <input type="text" id="messageInput" class="input-bar" placeholder="Tapez votre message...">
+    <button class="validate-button" onclick="sendMessage()">Valider</button>
+</footer>
+
+<div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
+<div id="friendsListPopup" class="friends-list-popup">
+    <div class="friends-list-content">
+        <span class="close-friends-list">&times;</span>
+        <h3>Liste d'amis</h3>
+        <ul id="friendsList"></ul>
+        <button onclick="addFriend()">Ajouter un ami</button>
+    </div>
+</div>
+
+<div id="cameraContainer" class="draggable-video-container" style="display: none;">
+    <div class="video-header">
+        <span>Camera</span>
+        <button class="close-video" onclick="closeCamera()">×</button>
+    </div>
+    <video id="cameraFeed" autoplay playsinline></video>
+</div>
+
+<div class="colored-margin"></div>
+
+<script>
+let currentUser = {
+    pseudo: null,
+    age: null,
+    department: null,
+    gender: null,
+    profilePic: 'https://example.com/default-avatar.png',
+    connectionTime: new Date().toISOString(),
+    cameraOn: false,
+    currentSpeakingSalon: null,
+    isHuman: true,
+    sessionId: ''
+};
+let currentTab = null;
+const tabContainer = document.getElementById('tabContainer');
+const tabContents = document.getElementById('tabContents');
+
+const connectedUsers = {
+    'Accueil': [
+        { age: 25, pseudo: 'User1', profilePic: 'https://example.com/user1.jpg', department: '75', connectionTime: '2023-05-10T14:30:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 30, pseudo: 'User2', profilePic: 'https://example.com/user2.jpg', department: '92', connectionTime: '2023-05-10T15:45:00', gender: 'male', cameraOn: false, isHuman: true },
+        { age: 22, pseudo: 'User3', profilePic: 'https://example.com/user3.jpg', department: '75', connectionTime: '2023-05-10T16:20:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 28, pseudo: 'User4', profilePic: 'https://example.com/user4.jpg', connectionTime: '2023-05-10T17:10:00', gender: 'male', cameraOn: false, isHuman: true },
+        { age: 35, pseudo: 'User5', profilePic: 'https://example.com/user5.jpg', department: '13', connectionTime: '2023-05-10T18:05:00', gender: 'male', cameraOn: false, isHuman: true }
+    ],
+    'Salon 1': [
+        { age: 22, pseudo: 'Pseudo_1', profilePic: 'https://example.com/pseudo1.jpg', connectionTime: '2023-05-10T14:00:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 30, pseudo: 'Pseudo_2', profilePic: 'https://example.com/pseudo2.jpg', connectionTime: '2023-05-10T15:30:00', gender: 'male', cameraOn: false, isHuman: true },
+        { age: 25, pseudo: 'Pseudo_3', profilePic: 'https://example.com/pseudo3.jpg', connectionTime: '2023-05-10T16:45:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 28, pseudo: 'Pseudo_4', profilePic: 'https://example.com/pseudo4.jpg', connectionTime: '2023-05-10T17:20:00', gender: 'male', cameraOn: false, isHuman: true }
+    ],
+    'Salon 2': [
+        { age: 28, pseudo: 'Pseudo_5', profilePic: 'https://example.com/pseudo5.jpg', connectionTime: '2023-05-10T15:00:00', gender: 'male', cameraOn: false, isHuman: true },
+        { age: 35, pseudo: 'Pseudo_6', profilePic: 'https://example.com/pseudo6.jpg', connectionTime: '2023-05-10T16:30:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 32, pseudo: 'Pseudo_7', profilePic: 'https://example.com/pseudo7.jpg', connectionTime: '2023-05-10T17:10:00', gender: 'male', cameraOn: false, isHuman: true }
+    ],
+    'Salon 3': [
+        { age: 27, pseudo: 'Pseudo_8', profilePic: 'https://example.com/pseudo8.jpg', connectionTime: '2023-05-10T14:45:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 24, pseudo: 'Pseudo_9', profilePic: 'https://example.com/pseudo9.jpg', connectionTime: '2023-05-10T15:20:00', gender: 'male', cameraOn: false, isHuman: true }
+    ],
+    'Salon 18 - 25': [
+        { age: 23, pseudo: 'Pseudo_10', profilePic: 'https://example.com/pseudo10.jpg', connectionTime: '2023-05-10T14:15:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 25, pseudo: 'Pseudo_11', profilePic: 'https://example.com/pseudo11.jpg', connectionTime: '2023-05-10T15:45:00', gender: 'male', cameraOn: false, isHuman: true },
+        { age: 20, pseudo: 'Pseudo_12', profilePic: 'https://example.com/pseudo12.jpg', connectionTime: '2023-05-10T16:15:00', gender: 'female', cameraOn: false, isHuman: true }
+    ],
+    'Salon 20 - 40 VOX': [
+        { age: 32, pseudo: 'Pseudo_13', profilePic: 'https://example.com/pseudo13.jpg', connectionTime: '2023-05-10T15:30:00', gender: 'male', cameraOn: false, isHuman: true },
+        { age: 29, pseudo: 'Pseudo_14', profilePic: 'https://example.com/pseudo14.jpg', connectionTime: '2023-05-10T16:00:00', gender: 'female', cameraOn: false, isHuman: true }
+    ],
+    'Salon Politique': [
+        { age: 40, pseudo: 'Pseudo_15', profilePic: 'https://example.com/pseudo15.jpg', connectionTime: '2023-05-10T15:15:00', gender: 'male', cameraOn: false, isHuman: true },
+        { age: 35, pseudo: 'Pseudo_16', profilePic: 'https://example.com/pseudo16.jpg', connectionTime: '2023-05-10T16:10:00', gender: 'female', cameraOn: false, isHuman: true },
+        { age: 45, pseudo: 'Pseudo_17', profilePic: 'https://example.com/pseudo17.jpg', connectionTime: '2023-05-10T17:05:00', gender: 'male', cameraOn: false, isHuman: true }
+    ]
+};
+
+let isMuted = false;
+let speakerQueue = [];
+let currentSpeakers = [];
+const maxSpeakers = 5;
+let speakerTimers = {};
+
+function toggleLeftColumn(isPrivateChat) {
+    const leftColumn = document.querySelector('.left-column');
+    if (leftColumn) {
+        leftColumn.style.display = isPrivateChat ? 'none' : 'block';
+    }
+}
+
+function updateConnectedUsersAccueil() {
+    const connectedUsersDiv = document.getElementById('connectedUsers');
+    const users = connectedUsers['Accueil'] || [];
+
+    let html = `
+        <h3>Utilisateurs connectés</h3>
+        <ul class="accueil-list">
+    `;
+
+    users.forEach(user => {
+        if (user.isHuman) {
+            const genderColor = user.gender === 'female' ? '#ffcccc' : '#cceeff';
+            html += `
+                <li style="background-color: ${genderColor};">
+                    <span class="user-age">${user.age || 'N/A'}</span>
+                    ${user.pseudo === currentUser.pseudo ? 
+                        `<span>${user.pseudo || 'Anonymous'}</span>` : 
+                        `<a href="#" onclick="openPrivateChat('${user.pseudo}'); return false;">${user.pseudo || 'Anonymous'}</a>`}
+                    <span class="user-department"> - Dép. ${user.department || 'N/A'}</span>
+                </li>
+            `;
+        }
+    });
+
+    html += `
+        </ul>
+    `;
+
+    connectedUsersDiv.innerHTML = html;
+}
+
+function handleInitialRegistration(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    const usernameRegex = /^(?:[a-zA-Z0-9]{1,15}|[0-9]{1,10})$/;
+    if (!usernameRegex.test(data.username)) {
+        alert("Le pseudo doit contenir soit 15 caractères alphanumériques maximum, soit 10 chiffres maximum.");
+        return;
+    }
+    
+    const cityDisplay = document.getElementById('cityDisplay');
+    const communeSelect = document.getElementById('communeSelect');
+    if (communeSelect && communeSelect.style.display !== 'none' && !communeSelect.value) {
+        alert("Veuillez choisir une commune avant de continuer.");
+        return;
+    }
+    
+    alert("Inscription réussie ! Bienvenue sur COCO.");
+    
+    currentUser = {
+        pseudo: data.username,
+        age: parseInt(data.age),
+        department: data.department,
+        gender: data.gender,
+        profilePic: 'https://example.com/default-avatar.png',
+        connectionTime: new Date().toISOString(),
+        cameraOn: false,
+        currentSpeakingSalon: null,
+        isHuman: true,
+        sessionId: generateSessionId()
+    };
+    
+    connectedUsers['Accueil'].push(currentUser);
+    logUserConnection(currentUser);
+    
+    showMainSite();
+}
+
+function generateSessionId() {
+    return 'session_' + Math.random().toString(36).substr(2, 9);
+}
+
+function logUserConnection(user) {
+    console.log(`User connected: ${user.pseudo} (Session ID: ${user.sessionId})`);
+}
+
+function toggleMute(salonName) {
+    if (currentSpeakers.includes(currentUser.pseudo)) {
+        isMuted = !isMuted;
+        const muteBtn = document.getElementById(`micMuteBtn-${salonName}`);
+        if (isMuted) {
+            muteBtn.textContent = 'Unmute';
+            muteBtn.style.backgroundColor = '#ff6b6b';
+        } else {
+            muteBtn.textContent = 'Mute';
+            muteBtn.style.backgroundColor = '';
+        }
+        console.log(isMuted ? 'Audio muted' : 'Audio unmuted');
+    }
+}
+
+function isPrivateChat(tabName) {
+    const tab = document.querySelector(`.tab[data-name="${tabName}"]`);
+    return tab && tab.classList.contains('private-chat');
+}
+
+function highlightTab(tabName) {
+    const tab = document.querySelector(`.tab[data-name="${tabName}"]`);
+    if (tab && !tab.classList.contains('active')) {
+        tab.style.backgroundColor = 'yellow';
+    }
+}
+
+function resetTabColor(tabName) {
+    const tab = document.querySelector(`.tab[data-name="${tabName}"]`);
+    if (tab) {
+        tab.style.backgroundColor = '';
+    }
+}
+
+function toggleMenuButtons() {
+    const menuButtons = document.querySelector('.right-column .menu-buttons');
+    if (menuButtons) {
+        menuButtons.style.display = currentTab === 'Accueil' ? 'flex' : 'none';
+        menuButtons.innerHTML = `
+            <button onclick="openAccueil()">Accueil</button>
+            <button onclick="openProfile()">Profil</button>
+            <button onclick="openAmizz()">Amizz</button>
+            <button onclick="openAuthentication()">Authentification</button>
+            <button onclick="openProfileRecovery()">Récupération de profil</button>
+        `;
+    }
+}
+
+function updateConnectedUsers(tabName) {
+    const rightColumn = document.querySelector('.right-column');
+    if (tabName === 'Accueil') {
+        rightColumn.innerHTML = `
+            <div class="menu-buttons">
+                <button onclick="openAccueil()">Accueil</button>
+                <button onclick="openProfile()">Profil</button>
+                <button onclick="openAmizz()">Amizz</button>
+                <button onclick="openAuthentication()">Authentification</button>
+                <button onclick="openProfileRecovery()">Récupération de profil</button>
+            </div>
+        `;
+    } else if (connectedUsers[tabName]) {
+        let html = `
+            <h3>Utilisateurs connectés</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Âge</th>
+                        <th>Pseudo</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        let users = [...connectedUsers[tabName]];
+        if (currentUser && !users.some(user => user.pseudo === currentUser.pseudo)) {
+            users.push(currentUser);
+        }
+
+        users.forEach(user => {
+            const genderColor = user.gender === 'female' ? '#ffcccc' : '#cceeff';
+            html += `
+                <tr style="background-color: ${genderColor};">
+                    <td>${user.age}</td>
+                    <td>
+                        ${user.pseudo === currentUser.pseudo ? user.pseudo : `<a href="#" onclick="openPrivateChat('${user.pseudo}'); return false;">${user.pseudo}</a>`}
+                        ${user.cameraOn ? '<i class="fas fa-video" style="color: green;"></i>' : ''}
+                    </td>
+                </tr>
+            `;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        rightColumn.innerHTML = html;
+
+        if (tabName === 'Salon Politique' || tabName === 'Salon 20 - 40 VOX') {
+            html += `
+                <div class="user-actions">
+                    <button class="icon-btn" onclick="toggleCamera('${tabName}')"><i class="fas fa-video"></i></button>
+                    <button class="icon-btn" onclick="document.getElementById('imageUpload-${tabName}').click()"><i class="fas fa-image"></i></button>
+                    <button class="icon-btn" onclick="toggleMicrophone('${tabName}')"><i class="fas fa-microphone"></i></button>
+                </div>
+            `;
+        }
+    } else {
+        rightColumn.innerHTML = '';
+    }
+}
+
+function turnMicrophoneOn(salonName) {
+    if (currentUser.currentSpeakingSalon && currentUser.currentSpeakingSalon !== salonName) {
+        alert(`Vous êtes déjà au micro dans le salon ${currentUser.currentSpeakingSalon}. Veuillez d'abord quitter ce micro.`);
+        return;
+    }
+
+    const micOnBtn = document.getElementById(`micOnBtn-${salonName}`);
+    const micOffBtn = document.getElementById(`micOffBtn-${salonName}`);
+    const micMuteBtn = document.getElementById(`micMuteBtn-${salonName}`);
+
+    micOnBtn.disabled = true;
+    micOffBtn.disabled = false;
+    micMuteBtn.disabled = false;
+
+    currentUser.currentSpeakingSalon = salonName;
+
+    if (salonName === 'Salon Politique') {
+        if (!currentSpeakers.includes(currentUser.pseudo)) {
+            if (currentSpeakers.length < maxSpeakers) {
+                currentSpeakers.push(currentUser.pseudo);
+                startSpeakerTimer(currentUser.pseudo);
+            } else {
+                speakerQueue.push(currentUser.pseudo);
+            }
+        }
+    } else if (salonName === 'Salon 20 - 40 VOX') {
+        if (!currentSpeakers.includes(currentUser.pseudo) && currentSpeakers.length < 5) {
+            currentSpeakers.push(currentUser.pseudo);
+        }
+    }
+    updateSpeakerQueue(salonName);
+}
+
+function turnMicrophoneOff(salonName) {
+    const micOnBtn = document.getElementById(`micOnBtn-${salonName}`);
+    const micOffBtn = document.getElementById(`micOffBtn-${salonName}`);
+    const micMuteBtn = document.getElementById(`micMuteBtn-${salonName}`);
+
+    micOnBtn.disabled = false;
+    micOffBtn.disabled = true;
+    micMuteBtn.disabled = true;
+
+    if (salonName === 'Salon Politique') {
+        if (currentSpeakers.includes(currentUser.pseudo)) {
+            clearInterval(speakerTimers[currentUser.pseudo]);
+            currentSpeakers = currentSpeakers.filter(speaker => speaker !== currentUser.pseudo);
+            nextSpeaker(salonName);
+        }
+        speakerQueue = speakerQueue.filter(speaker => speaker !== currentUser.pseudo);
+    } else if (salonName === 'Salon 20 - 40 VOX') {
+        currentSpeakers = currentSpeakers.filter(speaker => speaker !== currentUser.pseudo);
+    }
+    updateSpeakerQueue(salonName);
+
+    currentUser.currentSpeakingSalon = null;
+}
+
+function toggleMicrophone(salonName) {
+    if (currentUser.currentSpeakingSalon && currentUser.currentSpeakingSalon !== salonName) {
+        alert(`Vous êtes déjà au micro dans le salon ${currentUser.currentSpeakingSalon}. Veuillez d'abord quitter ce micro.`);
+        return;
+    }
+
+    const micOnBtn = document.getElementById(`micOnBtn-${salonName}`);
+    if (micOnBtn.disabled) {
+        turnMicrophoneOff(salonName);
+    } else {
+        turnMicrophoneOn(salonName);
+    }
+}
+
+function updateSpeakerQueue(salonName) {
+    const currentSpeakersElement = document.getElementById(`currentSpeakers-${salonName}`);
+    const queueListElement = document.getElementById(`queueList-${salonName}`);
+
+    if (currentSpeakersElement && queueListElement) {
+        currentSpeakersElement.innerHTML = currentSpeakers.map(speaker => `
+            <div class="current-speaker">
+                ${speaker}
+                ${salonName === 'Salon Politique' ? `<span id="speakerTimer-${speaker}">02:00</span>` : ''}
+            </div>
+        `).join('');
+
+        if (salonName === 'Salon Politique') {
+            queueListElement.innerHTML = speakerQueue.map(speaker => `<li>${speaker}</li>`).join('');
+        } else {
+            queueListElement.innerHTML = '';
+        }
+    }
+}
+
+function nextSpeaker(salonName) {
+    if (salonName === 'Salon Politique') {
+        while (currentSpeakers.length < maxSpeakers && speakerQueue.length > 0) {
+            const newSpeaker = speakerQueue.shift();
+            currentSpeakers.push(newSpeaker);
+            startSpeakerTimer(newSpeaker);
+        }
+    }
+    updateSpeakerQueue(salonName);
+}
+
+function startSpeakerTimer(speaker) {
+    let timeLeft = 120; // 2 minutes in seconds
+    speakerTimers[speaker] = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        const timerElement = document.getElementById(`speakerTimer-${speaker}`);
+        if (timerElement) {
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        if (timeLeft === 0) {
+            clearInterval(speakerTimers[speaker]);
+            currentSpeakers = currentSpeakers.filter(s => s !== speaker);
+            nextSpeaker('Salon Politique');
+        }
+        timeLeft--;
+    }, 1000);
+}
+
+function openAccueil() {
+    let { tab, content } = createTab('Accueil');
+    if (content && !content.querySelector('.accueil-content')) {
+        content.innerHTML = `
+            <div class="accueil-content">
+                <h2>Connectés</h2>
+                <div id="connectedUsers"></div>
+            </div>
+        `;
+    }
+    activateTab('Accueil');
+    updateConnectedUsersAccueil();
+    toggleMenuButtons();
+}
+
+function createTab(name, isPrivateChat = false) {
+    if (!name) {
+        return { tab: null, content: null };
+    }
+
+    const existingTab = document.querySelector(`.tab[data-name="${name}"]`);
+    if (existingTab) {
+        activateTab(name);
+        return { tab: existingTab, content: document.getElementById(`content-${name}`) };
+    }
+
+    const tab = document.createElement('div');
+    tab.className = 'tab';
+    tab.textContent = isPrivateChat ? `Chat: ${name}` : name;
+    tab.setAttribute('data-name', name);  // Add this line
+    tab.onclick = () => activateTab(name);
+
+    if (name !== 'Accueil') {
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'close-btn';
+        closeBtn.textContent = '×';
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeTab(name);
+        };
+        tab.appendChild(closeBtn);
+    }
+
+    const tabContainer = document.getElementById('tabContainer');
+    if (tabContainer) {
+        tabContainer.appendChild(tab);
+    }
+
+    const content = document.createElement('div');
+    content.className = 'tab-content';
+    content.id = `content-${name}`;
+
+    const tabContents = document.getElementById('tabContents');
+    if (tabContents) {
+        tabContents.appendChild(content);
+    }
+
+    return { tab, content };
+}
+
+function activateTab(name) {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+    contents.forEach(content => content.classList.remove('active'));
+
+    const activeTab = Array.from(tabs).find(tab => tab.getAttribute('data-name') === name);
+    const activeContent = document.getElementById(`content-${name}`);
+
+    if (activeTab && activeContent) {
+        activeTab.classList.add('active');
+        activeContent.classList.add('active');
+        resetTabColor(name);
+        currentTab = name;
+        updateConnectedUsers(name);
+        toggleMenuButtons();
+        
+        const centerColumn = document.querySelector('.center-column');
+        const rightColumn = document.querySelector('.right-column');
+        const isPrivateChat = activeTab.classList.contains('private-chat');
+        
+        if (isPrivateChat) {
+            centerColumn.classList.add('full-width');
+            rightColumn.style.width = '0';
+            rightColumn.style.padding = '0';
+        } else {
+            centerColumn.classList.remove('full-width');
+            rightColumn.style.width = '25%';
+            rightColumn.style.padding = '10px';
+        }
+        
+        toggleLeftColumn(isPrivateChat);
+    }
+}
+
+function closeTab(name) {
+    const tab = document.querySelector(`.tab[data-name="${name}"]`);
+    const content = document.getElementById(`content-${name}`);
+    
+    if (tab && content) {
+        tab.remove();
+        content.remove();
+        
+        updateMicrophoneStatus();
+        
+        if (currentTab === name) {
+            const remainingTabs = document.querySelectorAll('.tab');
+            if (remainingTabs.length > 0) {
+                activateTab('Accueil');
+            } else {
+                openAccueil();
+            }
+        }
+    }
+}
+
+function updateMicrophoneStatus() {
+    if (currentUser.currentSpeakingSalon) {
+        const salonTab = document.querySelector(`.tab[data-name="${currentUser.currentSpeakingSalon}"]`);
+        if (!salonTab) {
+            currentUser.currentSpeakingSalon = null;
+            const allSalons = ['Salon Politique', 'Salon 20 - 40 VOX'];
+            allSalons.forEach(salon => {
+                const micOnBtn = document.getElementById(`micOnBtn-${salon}`);
+                const micOffBtn = document.getElementById(`micOffBtn-${salon}`);
+                const micMuteBtn = document.getElementById(`micMuteBtn-${salon}`);
+                
+                if (micOnBtn && micOffBtn && micMuteBtn) {
+                    micOnBtn.disabled = false;
+                    micOffBtn.disabled = true;
+                    micMuteBtn.disabled = true;
+                }
+                
+                if (salon === 'Salon Politique') {
+                    currentSpeakers = currentSpeakers.filter(speaker => speaker !== currentUser.pseudo);
+                    speakerQueue = speakerQueue.filter(speaker => speaker !== currentUser.pseudo);
+                    clearInterval(speakerTimers[currentUser.pseudo]);
+                    nextSpeaker(salon);
+                } else if (salon === 'Salon 20 - 40 VOX') {
+                    currentSpeakers = currentSpeakers.filter(speaker => speaker !== currentUser.pseudo);
+                }
+                
+                updateSpeakerQueue(salon);
+            });
+        }
+    }
+}
+
+function openSalon(salonName) {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        const tabName = tab.getAttribute('data-name');
+        if (tabName !== 'Accueil' && tabName !== salonName && !tab.classList.contains('private-chat')) {
+            closeTab(tabName);
+        }
+    });
+
+    let { tab, content } = createTab(salonName);
+    if (!content.querySelector('.chat-area')) {
+        content.innerHTML = `
+            <div class="salon-icons">
+                <button class="icon-btn" onclick="toggleCamera('${salonName}')"><i class="fas fa-video"></i></button>
+                <input type="file" id="imageUpload-${salonName}" accept="image/*" style="display: none;" onchange="handleImageUpload(event, '${salonName}')">
+                <button class="icon-btn" onclick="document.getElementById('imageUpload-${salonName}').click()"><i class="fas fa-image"></i></button>
+                <button class="icon-btn" onclick="toggleMicrophone('${salonName}')"><i class="fas fa-microphone"></i></button>
+            </div>
+            <div class="chat-area" id="chat-${salonName}"></div>
+        `;
+
+        if (salonName === 'Salon Politique' || salonName === 'Salon 20 - 40 VOX') {
+            content.innerHTML += `
+                <div id="speakerSystem-${salonName}" class="speaker-system">
+                    <div id="currentSpeakers-${salonName}" class="current-speakers">
+                        <!-- Current speakers will be dynamically added here -->
+                    </div>
+                    <div id="speakerQueue-${salonName}" class="speaker-queue">
+                        <h3>Speaker Queue</h3>
+                        <ul id="queueList-${salonName}"></ul>
+                    </div>
+                    <div id="microphoneControls-${salonName}">
+                        <button id="micOnBtn-${salonName}" onclick="turnMicrophoneOn('${salonName}')" style="background-color: #4CAF50; color: white;">On</button>
+                        <button id="micOffBtn-${salonName}" onclick="turnMicrophoneOff('${salonName}')" style="background-color: #f44336; color: white;" disabled>Off</button>
+                        <button id="micMuteBtn-${salonName}" onclick="toggleMute('${salonName}')" disabled>Mute</button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    activateTab(salonName);
+    
+    if (currentUser && !connectedUsers[salonName].some(user => user.pseudo === currentUser.pseudo)) {
+        connectedUsers[salonName].push(currentUser);
+    }
+    
+    updateConnectedUsers(salonName);
+    toggleMenuButtons();
+
+    if (salonName === 'Salon Politique' || salonName === 'Salon 20 - 40 VOX') {
+        updateSpeakerQueue(salonName);
+    }
+}
+
+function openProfile() {
+    let { tab, content } = createTab('Profil');
+    if (!content.querySelector('.profile-content')) {
+        content.innerHTML = `
+            <h2>Mon Profil</h2>
+            <div class="profile-content">
+                <img id="profilePicture" src="https://example.com/default-avatar.png" alt="Photo de profil" class="profile-picture">
+                <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                <button onclick="document.getElementById('profilePicInput').click()">Changer la photo</button>
+            </div>
+        `;
+
+        document.getElementById('profilePicInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePicture').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    activateTab('Profil');
+    toggleMenuButtons();
+}
+
+function openAmizz() {
+    let { tab, content } = createTab('Amizz');
+    if (!content.querySelector('.amizz-content')) {
+        content.innerHTML = `
+            <h2>Amizz</h2>
+            <div class="amizz-content">
+                <button id="showFriendsListBtn">Voir la liste d'amis</button>
+                <div id="friendsListPopup" class="friends-list-popup">
+                    <div class="friends-list-content">
+                        <span class="close-friends-list">&times;</span>
+                        <h3>Liste d'amis</h3>
+                        <ul id="friendsList"></ul>
+                        <button onclick="addFriend()">Ajouter un ami</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const showFriendsListBtn = content.querySelector('#showFriendsListBtn');
+        const friendsListPopup = content.querySelector('#friendsListPopup');
+        const closeFriendsList = content.querySelector('.close-friends-list');
+
+        if (showFriendsListBtn && friendsListPopup && closeFriendsList) {
+            showFriendsListBtn.onclick = function() {
+                friendsListPopup.style.display = "block";
+                updateFriendsList();
+            }
+
+            closeFriendsList.onclick = function() {
+                friendsListPopup.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == friendsListPopup) {
+                    friendsListPopup.style.display = "none";
+                }
+            }
+        }
+    }
+    activateTab('Amizz');
+    toggleMenuButtons();
+}
+
+let friendsList = [];
+
+function updateFriendsList() {
+    const friendsListElement = document.getElementById('friendsList');
+    if (friendsListElement) {
+        friendsListElement.innerHTML = friendsList.map(friend => `
+            <li>${friend} <button onclick="removeFriend('${friend}')">Supprimer</button></li>
+        `).join('');
+    }
+}
+
+function addFriend() {
+    if (friendsList.length < 30) {
+        const friendName = prompt("Entrez le nom de l'ami à ajouter:");
+        if (friendName && !friendsList.includes(friendName)) {
+            friendsList.push(friendName);
+            updateFriendsList();
+        } else if (friendsList.includes(friendName)) {
+            alert("Cet ami est déjà dans votre liste.");
+        }
+    } else {
+        alert("Vous avez atteint la limite de 30 amis.");
+    }
+}
+
+function removeFriend(friendName) {
+    friendsList = friendsList.filter(friend => friend !== friendName);
+    updateFriendsList();
+}
+
+function addFriendFromPrivateChat(friendName) {
+    if (friendsList.length < 30) {
+        if (!friendsList.includes(friendName)) {
+            sendFriendRequest(friendName);
+            setTimeout(() => receiveFriendRequest('[Votre_Pseudo]'), 1000);
+            alert(`Demande d'ami envoyée à ${friendName}.`);
+        } else {
+            alert("Cet ami est déjà dans votre liste.");
+        }
+    } else {
+        alert("Vous avez atteint la limite de 30 amis.");
+    }
+}
+
+function sendFriendRequest(friendName) {
+    const chatArea = document.getElementById(`chat-${friendName}`);
+    if (chatArea) {
+        const requestElement = document.createElement('div');
+        requestElement.className = 'friend-request';
+        requestElement.innerHTML = `
+            <p>Demande d'ami envoyée à ${friendName}</p>
+        `;
+        chatArea.appendChild(requestElement);
+    }
+}
+
+function receiveFriendRequest(senderName) {
+    const chatArea = document.getElementById(`chat-${senderName}`);
+    if (chatArea) {
+        const requestElement = document.createElement('div');
+        requestElement.className = 'friend-request';
+        requestElement.innerHTML = `
+            <p>Demande d'ami reçue de ${senderName}</p>
+            <button onclick="acceptFriendRequest('${senderName}')">Accepter</button>
+            <button onclick="rejectFriendRequest('${senderName}')">Refuser</button>
+        `;
+        chatArea.appendChild(requestElement);
+    }
+}
+
+function acceptFriendRequest(friendName) {
+    if (!friendsList.includes(friendName)) {
+        friendsList.push(friendName);
+        updateFriendsList();
+        alert(`${friendName} a été ajouté à votre liste d'amis.`);
+    }
+    removeFriendRequest(friendName);
+}
+
+function rejectFriendRequest(friendName) {
+    alert(`Vous avez refusé la demande d'ami de ${friendName}.`);
+    removeFriendRequest(friendName);
+}
+
+function removeFriendRequest(friendName) {
+    const chatArea = document.getElementById(`chat-${friendName}`);
+    if (chatArea) {
+        const requestElement = chatArea.querySelector('.friend-request');
+        if (requestElement) {
+            requestElement.remove();
+        }
+    }
+}
+
+function openPrivateChat(userName) {
+    if (userName) {
+        let { tab, content } = createTab(userName, true);
+        tab.classList.add('private-chat');
+        
+        let userProfilePic = 'https://example.com/default-avatar.png';
+        let userInfo;
+        for (let room in connectedUsers) {
+            let user = connectedUsers[room].find(u => u.pseudo === userName);
+            if (user) {
+                userProfilePic = user.profilePic;
+                userInfo = user;
+                break;
+            }
+        }
+        
+        if (!content.querySelector('.chat-area')) {
+            content.innerHTML = `
+                <div class="private-chat-header">
+                    <div class="profile-actions">
+                        <img class="profile-picture" src="${userProfilePic}" alt="Photo de profil de ${userName}" onclick="openModal(this.src)">
+                        <div class="chat-actions">
+                            <button class="chat-action-btn" onclick="toggleCamera('${userName}')"><i class="fas fa-video"></i></button>
+                            <button class="chat-action-btn add-friend" onclick="addFriendFromPrivateChat('${userName}')"><i class="fas fa-user-plus"></i></button>
+                            <button class="chat-action-btn" onclick="toggleMicrophone('${userName}')"><i class="fas fa-microphone"></i></button>
+                            <input type="file" id="imageUpload-${userName}" accept="image/*" style="display: none;" onchange="handleImageUpload(event, '${userName}')">
+                            <button class="chat-action-btn" onclick="document.getElementById('imageUpload-${userName}').click()"><i class="fas fa-image"></i></button>
+                            <button class="chat-action-btn" onclick="showUserInfo('${userName}')"><i class="fas fa-question-circle"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-area" id="chat-${userName}"></div>
+            `;
+        }
+        activateTab(userName);
+        toggleMenuButtons();
+        updateConnectedUsers(userName);
+
+        const centerColumn = document.querySelector('.center-column');
+        const rightColumn = document.querySelector('.right-column');
+        centerColumn.classList.add('full-width');
+        rightColumn.style.width = '0';
+        rightColumn.style.padding = '0';
+        
+        toggleLeftColumn(true);
+    }
+}
+
+function handleImageUpload(event, userName) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const chatArea = document.getElementById(`chat-${userName}`);
+            if (chatArea) {
+                const imageElement = document.createElement('div');
+                imageElement.className = 'chat-message user';
+                imageElement.innerHTML = `<img src="${e.target.result}" alt="Uploaded image" onclick="openModal(this.src)">`;
+                chatArea.appendChild(imageElement);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        };
+        reader.onerror = function(error) {
+            console.error('Error reading file:', error);
+            alert('Une erreur est survenue lors du chargement de l\'image. Veuillez réessayer.');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+let stream = null;
+
+function toggleCamera(tabName) {
+    const cameraContainer = document.getElementById('cameraContainer');
+    if (cameraContainer.style.display === 'none') {
+        startCamera();
+        currentUser.cameraOn = true;
+    } else {
+        closeCamera();
+        currentUser.cameraOn = false;
+    }
+    
+    updateCameraStatusInAllRooms();
+}
+
+async function startCamera() {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        const videoElement = document.getElementById('cameraFeed');
+        videoElement.srcObject = stream;
+        document.getElementById('cameraContainer').style.display = 'block';
+        makeDraggable(document.getElementById('cameraContainer'));
+    } catch (err) {
+        console.error('Error accessing camera:', err);
+        alert('Impossible d\'accéder à la caméra. Veuillez vérifier que vous avez accordé les autorisations nécessaires.');
+    }
+}
+
+function closeCamera() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+    document.getElementById('cameraContainer').style.display = 'none';
+}
+
+function updateCameraStatusInAllRooms() {
+    for (let room in connectedUsers) {
+        updateConnectedUsers(room);
+    }
+}
+
+function makeDraggable(element) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    element.querySelector('.video-header').onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
+}
+
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (message && currentTab) {
+        const chatArea = document.getElementById(`chat-${currentTab}`);
+        if (chatArea) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'chat-message user';
+            messageElement.innerHTML = `<span class="pseudo">${currentUser.pseudo}:</span> ${message}`;
+            chatArea.appendChild(messageElement);
+            messageInput.value = '';
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            setTimeout(() => {
+                const receivedMessage = document.createElement('div');
+                receivedMessage.className = 'chat-message other';
+                receivedMessage.innerHTML = `<span class="pseudo">${currentTab}:</span> Reply to: ${message}`;
+                chatArea.appendChild(receivedMessage);
+                chatArea.scrollTop = chatArea.scrollHeight;
+
+                if (currentTab !== document.querySelector('.tab.active').getAttribute('data-name')) {
+                    highlightTab(currentTab);
+                }
+            }, 1000);
+        }
+    }
+}
+
+function openModal(imageSrc) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    modal.style.display = "block";
+    modalImg.src = imageSrc;
+    modalImg.style.maxWidth = "60%";
+    modalImg.style.maxHeight = "80%";
+}
+
+document.querySelector('.close').onclick = function() {
+    document.getElementById('imageModal').style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    showInitialRegistrationForm();
+});
+
+function showInitialRegistrationForm() {
+    const container = document.querySelector('.container');
+    const header = document.querySelector('header');
+    const footer = document.querySelector('footer');
+
+    if (container) container.style.display = 'none';
+    if (header) header.style.display = 'none';
+    if (footer) footer.style.display = 'none';
+    
+    const registrationContainer = document.createElement('div');
+    registrationContainer.id = 'initialRegistration';
+    registrationContainer.innerHTML = `
+        <div class="registration-frame">
+            <h2>Pseudo</h2>
+            <form id="initialRegistrationForm" class="registration-form">
+                <input type="text" id="username" name="username" class="username-input" placeholder="Nom d'utilisateur" required maxlength="15" pattern="^(?:[a-zA-Z0-9]{1,15}|[0-9]{1,10})$">
+                <div class="gender-selection">
+                    <label>
+                        <input type="radio" name="gender" value="male" required> Homme
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="female" required> Femme
+                    </label>
+                </div>
+                <div class="age-container">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" class="age-input" required min="18" max="99" maxlength="2" pattern="^[0-9]{2}$">
+                </div>
+                <div class="department-container">
+                    <label for="department">Code postal</label>
+                    <input type="text" id="department" name="department" class="department-input" placeholder="(2-5 chiffres)" required pattern="^[0-9]{2,5}$" maxlength="5">
+                </div>
+                <div id="cityDisplay" style="margin-top: 5px; font-style: italic;"></div>
+                <div class="button-container">
+                    <button type="submit" id="enterButton" disabled>Entrer</button>
+                </div>
+            </form>
+        </div>
+        <div class="colored-margin"></div>
+    `;
+    document.body.insertBefore(registrationContainer, document.body.firstChild);
+    
+    const form = document.getElementById('initialRegistrationForm');
+    if (form) {
+        form.addEventListener('submit', handleInitialRegistration);
+    }
+
+    const departmentInput = document.getElementById('department');
+    if (departmentInput) {
+        departmentInput.addEventListener('input', function() {
+            const postalCode = this.value;
+            const enterButton = document.getElementById('enterButton');
+            if (postalCode.length === 5) {
+                fetch(`https://geo.api.gouv.fr/communes?codePostal=${postalCode}&fields=nom&format=json&geometry=centre`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const cityDisplay = document.getElementById('cityDisplay');
+                        if (data.length > 0) {
+                            if (data.length === 1) {
+                                cityDisplay.innerHTML = `Ville : ${data[0].nom}`;
+                                enterButton.disabled = false;
+                            } else {
+                                let options = data.map(commune => `<option value="${commune.nom}">${commune.nom}</option>`).join('');
+                                cityDisplay.innerHTML = `
+                                    Plusieurs communes trouvées :
+                                    <select id="communeSelect">
+                                        <option value="">Choisissez votre commune</option>
+                                        ${options}
+                                    </select>
+                                `;
+                                enterButton.disabled = true;
+                                document.getElementById('communeSelect').addEventListener('change', function() {
+                                    if (this.value) {
+                                        cityDisplay.innerHTML = `Ville : ${this.value}`;
+                                        enterButton.disabled = false;
+                                    } else {
+                                        enterButton.disabled = true;
+                                    }
+                                });
+                            }
+                        } else {
+                            cityDisplay.textContent = 'Ville non trouvée';
+                            enterButton.disabled = true;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching city:', error);
+                        cityDisplay.textContent = 'Erreur lors de la recherche de la ville';
+                        enterButton.disabled = true;
+                    });
+            } else {
+                document.getElementById('cityDisplay').textContent = '';
+                enterButton.disabled = true;
+            }
+        });
+    }
+}
+
+function showMainSite() {
+    const initialRegistration = document.getElementById('initialRegistration');
+    const container = document.querySelector('.container');
+    const header = document.querySelector('header');
+    const footer = document.querySelector('footer');
+    const coloredMargin = document.querySelector('.colored-margin');
+
+    if (initialRegistration) initialRegistration.remove();
+    if (container) container.style.display = 'flex';
+    if (header) header.style.display = 'flex';
+    if (footer) footer.style.display = 'flex';
+    if (coloredMargin) coloredMargin.style.display = 'none';
+    openAccueil();
+}
+
+function openAuthentication() {
+    let { tab, content } = createTab('Authentification');
+    if (!content.querySelector('.authentication-content')) {
+        content.innerHTML = `
+            <h2>Authentification</h2>
+            <div class="authentication-content">
+                <p>Cette section est en cours de développement.</p>
+                <!-- Add more content for authentication here -->
+            </div>
+        `;
+    }
+    activateTab('Authentification');
+    toggleMenuButtons();
+}
+
+function openProfileRecovery() {
+    let { tab, content } = createTab('Récupération de profil');
+    if (!content.querySelector('.profile-recovery-content')) {
+        content.innerHTML = `
+            <h2>Récupération de profil</h2>
+            <div class="profile-recovery-content">
+                <p>Cette section est en cours de développement.</p>
+                <!-- Add more content for profile recovery here -->
+            </div>
+        `;
+    }
+    activateTab('Récupération de profil');
+    toggleMenuButtons();
+}
+
+</script>
+
+</body>
+</html>
